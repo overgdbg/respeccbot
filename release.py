@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-TOKEN = 'NDk2MTQwNTcyNDQ1MjQ1NDY1.DpMSvg.pgddjEIT3QdIM4Pt5SQo1YghF-o'
+TOKEN = 'reallylol'
 
 counterf = 0
 
