@@ -1,7 +1,6 @@
 '''
 written by overgdbg
-state saving implemented by Adam S. (github:CobaltXII
-)
+state saving implemented by Adam S. (github:CobaltXII)
 '''
 import discord
 from discord.ext import commands
