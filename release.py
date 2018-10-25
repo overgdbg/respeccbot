@@ -1,5 +1,5 @@
 '''
-written by Justin Yu
+written by overgdbg
 state saving implemented by Adam S. (github:CobaltXII
 )
 '''
