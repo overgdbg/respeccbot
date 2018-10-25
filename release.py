@@ -357,5 +357,4 @@ async def commands():
     await client.say(embed = embed)
 
 
-keep_alive()
 client.run(TOKEN)
