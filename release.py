@@ -18,7 +18,7 @@ counterdf = 0
 
 counterr = 0
 
-version = 2.01
+version = 2.3
 
 client = commands.Bot(command_prefix = '!')
 
