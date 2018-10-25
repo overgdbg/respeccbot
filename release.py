@@ -1,7 +1,14 @@
+'''
+written by Justin Yu
+state saving implemented by Adam S. (github:CobaltXII
+)
+'''
 import discord
 from discord.ext import commands
+import os
+from keep_alive import keep_alive
 
-TOKEN = 'reallylol'
+TOKEN = os.environ.get("TOKEN")
 
 counterf = 0
 
@@ -16,6 +23,40 @@ version = 2.01
 client = commands.Bot(command_prefix = '!')
 
 client.remove_command('help')
+
+
+#load str from file
+sf = open("settings", "r")
+sd = sf.read()
+
+#split by newlines
+sd=sd.splitlines()
+#print(sd)
+#assign
+counterf = int(sd[0])
+countert = int(sd[1])
+counterdf = int(sd[2])
+counterr = int(sd[3])
+
+
+#close 
+sf.close()
+
+def update_fs():
+  #serialize variables
+  s = ""
+  s = s + str(counterf) + "\n"
+  s = s + str(countert) + "\n"
+  s = s + str(counterdf) + "\n"
+  s = s + str(counterr)
+  #print(s)
+  # clear file
+  sf2 = open("settings", "w")
+  sf2.close()
+  # write to file
+  sf = open("settings", "w")
+  sf.write(s)
+  sf.close()
 
 @client.event
 async def on_ready():
@@ -46,6 +87,7 @@ async def f(ctx, *args):
 
     if thing == '':
         counterf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' has paid their respects.',
         colour = discord.Colour.blue()
@@ -58,6 +100,7 @@ async def f(ctx, *args):
     
     elif thing == '@everyone' or thing == '@here':
         counterf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' tells everyone to pay their respects.',
         colour = discord.Colour.blue()
@@ -70,6 +113,7 @@ async def f(ctx, *args):
     
     else:
         counterf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' has paid their respects to ' + thing + ".",
         colour = discord.Colour.blue()
@@ -91,6 +135,7 @@ async def t(ctx, *args):
 
     if thing == '':
         countert += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' gave thanks.',
         colour = discord.Colour.blue()
@@ -103,6 +148,7 @@ async def t(ctx, *args):
     
     elif thing == '@everyone' or thing == '@here':
         countert += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' tells everyone to give thanks.',
         colour = discord.Colour.blue()
@@ -116,6 +162,7 @@ async def t(ctx, *args):
     else:
         if thing == 'the bus driver':
             countert += 1
+            update_fs()
             embed = discord.Embed(
             description = author + ' thanked the bus driver on the way to victory!.',
             colour = discord.Colour.blue()
@@ -127,6 +174,7 @@ async def t(ctx, *args):
             await client.say(embed = embed)
         else:
             countert += 1
+            update_fs()
             embed = discord.Embed(
             description = author + ' thanked ' + thing + '.',
             colour = discord.Colour.blue()
@@ -147,6 +195,7 @@ async def df(ctx, *args):
     thing = thing[:-1]
     if thing == '':
         counterdf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' disrespected.',
         colour = discord.Colour.blue()
@@ -158,6 +207,7 @@ async def df(ctx, *args):
         await client.say(embed = embed)
     elif thing == '@everyone' or thing == '@here':
         counterdf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' told everyone to disrespect',
         colour = discord.Colour.blue()
@@ -169,6 +219,7 @@ async def df(ctx, *args):
         await client.say(embed = embed)
     else:
         counterdf += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' has disrespected ' + thing + ".",
         colour = discord.Colour.blue()
@@ -190,6 +241,7 @@ async def r(ctx, *args):
 
     if thing == '':
         counterr += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' says rip.',
         colour = discord.Colour.blue()
@@ -202,6 +254,7 @@ async def r(ctx, *args):
     
     elif thing == '@everyone' or thing == '@here':
         counterr += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' tells everyone to put rips in the chat.',
         colour = discord.Colour.blue()
@@ -214,6 +267,7 @@ async def r(ctx, *args):
     
     else:
         counterr += 1
+        update_fs()
         embed = discord.Embed(
         description = author + ' says rip ' + thing + ".",
         colour = discord.Colour.blue()
@@ -296,14 +350,12 @@ async def commands():
     embed.add_field(name = '!f', value = '!f [optional thing] | Respect something', inline = False)
     embed.add_field(name = '!t', value = '!t [optional thing] | Thank something', inline = False)
     embed.add_field(name = '!df', value = '!df [optional thing] | Disrespect something', inline = False)
+    embed.add_field(name = '!r', value = '!r [optional thing] | Say rip to something', inline = False)
     embed.add_field(name = '!count', value = '!count [f, t, df, total] | See the amount of actions done since last bot start.', inline = False)
     embed.add_field(name = '!invite', value = 'Invite the bot to your server!')
 
     await client.say(embed = embed)
 
-@client.event
-async def on_member_join(member):
-    role = discord.utils.get(member.server.roles, name = 'Mcславяне')
-    await client.add_roles(member, role)
 
+keep_alive()
 client.run(TOKEN)
